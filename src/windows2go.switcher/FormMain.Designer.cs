@@ -30,7 +30,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStripItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.buttonSetNormal = new System.Windows.Forms.Button();
             this.buttonSetPortable = new System.Windows.Forms.Button();
             this.labelState = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
@@ -79,7 +79,7 @@
             this.groupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox.Controls.Add(this.button2);
+            this.groupBox.Controls.Add(this.buttonSetNormal);
             this.groupBox.Controls.Add(this.buttonSetPortable);
             this.groupBox.Controls.Add(this.labelState);
             this.groupBox.Location = new System.Drawing.Point(12, 27);
@@ -89,15 +89,16 @@
             this.groupBox.TabStop = false;
             this.groupBox.Text = "Current state:";
             // 
-            // button2
+            // buttonSetNormal
             // 
-            this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(260, 124);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(197, 41);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Set Normal";
-            this.button2.UseVisualStyleBackColor = true;
+            this.buttonSetNormal.Enabled = false;
+            this.buttonSetNormal.Location = new System.Drawing.Point(260, 124);
+            this.buttonSetNormal.Name = "buttonSetNormal";
+            this.buttonSetNormal.Size = new System.Drawing.Size(197, 41);
+            this.buttonSetNormal.TabIndex = 1;
+            this.buttonSetNormal.Text = "Set Normal";
+            this.buttonSetNormal.UseVisualStyleBackColor = true;
+            this.buttonSetNormal.Click += new System.EventHandler(this.buttonSetNormal_Click);
             // 
             // buttonSetPortable
             // 
@@ -108,6 +109,7 @@
             this.buttonSetPortable.TabIndex = 1;
             this.buttonSetPortable.Text = "Set Portable (windows to go)";
             this.buttonSetPortable.UseVisualStyleBackColor = true;
+            this.buttonSetPortable.Click += new System.EventHandler(this.buttonSetPortable_Click);
             // 
             // labelState
             // 
@@ -153,7 +155,7 @@
         private System.Windows.Forms.ToolStripMenuItem menuStripItemAbout;
         private System.Windows.Forms.GroupBox groupBox;
         private System.Windows.Forms.Label labelState;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button buttonSetNormal;
         private System.Windows.Forms.Button buttonSetPortable;
     }
 }
