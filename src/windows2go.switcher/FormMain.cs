@@ -11,18 +11,25 @@ using System.Windows.Forms;
 
 namespace windows2go.switcher {
     public partial class FormMain : Form {
+
+        RegistryKey key = RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, RegistryView.Default);
+
+        const string keyName ="HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control";
+
         public FormMain() {
             InitializeComponent();
-            if (!UACSecurity.IsAdmin()) {
-                UACSecurity.AddShieldToButton(buttonSetNormal);
-                UACSecurity.AddShieldToButton(buttonSetPortable);
-            } else
-                this.Text += " (Administrator)";
+            UACSecurity.AddShieldToButton(buttonSetNormal);
+            UACSecurity.AddShieldToButton(buttonSetPortable);
+            //  if (!UACSecurity.IsAdmin()) {
+            //      
+            //     
+            //  } else
+            //      this.Text += " (Administrator)";
         }
 
-        bool PortableState = false;
-        bool KeyExists = false;
-        bool unExpected=false;
+        bool PortableState;
+        bool KeyExists;
+        bool unExpected;
 
         private void FormMain_Load(object sender, EventArgs e) {
             FullRegistryCheck();
@@ -48,9 +55,9 @@ namespace windows2go.switcher {
         }
 
         private void GetState() {
-            RegistryKey key = RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, RegistryView.Registry32);
-            key = key.OpenSubKey(@"SYSTEM\CurrentControlSet\Control");
 
+            RegistryKey key = RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, RegistryView.Registry32);
+            key = key.OpenSubKey(@"SYSTEM\CurrentControlSet\Control", true);
             //check for exists "PortableOperatingSystem"
             if (key != null) {
                 switch (key.GetValue("PortableOperatingSystem")) {
@@ -95,32 +102,17 @@ namespace windows2go.switcher {
         }
 
         private void buttonSetNormal_Click(object sender, EventArgs e) {
-            if (UACSecurity.IsAdmin()) {
-                switch (unExpected) {
-                    case true:
-                        MessageBox.Show("oh no.", "");
-                        FullRegistryCheck();
-                        break;
+            Registry.SetValue(keyName, "PortableOperatingSystem", 0);
+            FullRegistryCheck();
 
-                    case false:
-                        MessageBox.Show("yay.", "");
-                        FullRegistryCheck();
-                        break;
-                }
-            } else {
-                UACSecurity.RestartElevated();
-            }
+
+
             
         }
 
         private void buttonSetPortable_Click(object sender, EventArgs e) {
-            if (UACSecurity.IsAdmin()) {
-                MessageBox.Show("okay.", "");
-                FullRegistryCheck();
-            } else {
-                UACSecurity.RestartElevated();
-            }
-           
+            Registry.SetValue(keyName, "PortableOperatingSystem", 1); 
+
 
         }
     }
