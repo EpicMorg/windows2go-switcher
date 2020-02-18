@@ -101,7 +101,7 @@
             this.buttonSet.TabIndex = 1;
             this.buttonSet.Text = "Set Some State";
             this.buttonSet.UseVisualStyleBackColor = true;
-            this.buttonSet.Click += new System.EventHandler(this.buttonSetNormal_Click);
+            this.buttonSet.Click += new System.EventHandler(this.buttonSet_Click);
             // 
             // labelState
             // 

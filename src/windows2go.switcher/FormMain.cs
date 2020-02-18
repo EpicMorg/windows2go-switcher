@@ -16,9 +16,7 @@ namespace windows2go.switcher {
         public FormMain() {
             InitializeComponent();
             UACSecurity.AddShieldToButton(buttonSet);
-
             if (UACSecurity.IsAdmin()) this.Text += " (Administrator)";
-            
         }
 
         private void FormMain_Load(object sender, EventArgs e) {
@@ -29,51 +27,37 @@ namespace windows2go.switcher {
             }
         }
 
-
         private void TryToGetValue() {
             object PortableOperatingSystemValue = ControlKey.GetValue("PortableOperatingSystem");
             if(PortableOperatingSystemValue != null) {
                 switch (ControlKey.GetValueKind("PortableOperatingSystem")) {
                     case RegistryValueKind.String:
                     case RegistryValueKind.ExpandString:
-                        //MessageBox.Show("ValueST = " + PortableOperatingSystemValue);
                         inBadTypeState();
                         break;
                     case RegistryValueKind.Binary:
-                        /*
-                        foreach (byte b in (byte[])PortableOperatingSystemValue) {
-                            MessageBox.Show("{0:x2} " + b);
-                        }
-                        Console.WriteLine();
-                        */
                         inBadTypeState();
                         break;
                     case RegistryValueKind.DWord: 
                         //if "PortableOperatingSystem" and it;s value not normal. example = "PortableOperatingSystem=42"
                         if ((PortableOperatingSystemValue.ToString() != "0") && (PortableOperatingSystemValue.ToString() != "1")) {
-                            //MessageBox.Show("ValueDW = " + Convert.ToString((Int32)PortableOperatingSystemValue));
                             inWrongValueState();
                         } else if (PortableOperatingSystemValue.ToString() == "0") {
                             inNormalValueState();
-                            //MessageBox.Show(PortableOperatingSystemValue.ToString(), "");
                         } else if(PortableOperatingSystemValue.ToString() == "1") {
                             inPortableValueState();
-                            //MessageBox.Show(PortableOperatingSystemValue.ToString(), "");
                         }
                         break;
                     case RegistryValueKind.QWord:
-                        //MessageBox.Show("ValueQW = " + Convert.ToString((Int64)PortableOperatingSystemValue));
                         inBadTypeState();
                         break;
                     case RegistryValueKind.MultiString:
                         foreach (string s in (string[])PortableOperatingSystemValue) {
-                            //MessageBox.Show("[{0:s}], ", s);
                             inBadTypeState();
                         }
                         Console.WriteLine();
                         break;
                     default:
-                        //MessageBox.Show("Value = (Unknown)");
                         inBadTypeState();
                         break;
                 }
@@ -81,19 +65,6 @@ namespace windows2go.switcher {
             } else {
                 inNotExistsState();
             }
-
-
-
-
-
-            /*
-            try {
-                
-            } catch (Exception ex) {
-                    inUnexpectedlState();
-                    MessageBox.Show(ex.ToString(), "");
-            }
-            */
             }
 
         #region states
@@ -154,7 +125,7 @@ namespace windows2go.switcher {
         }
         #endregion
 
-     
+        #region set states
         private void SetNormalState() { 
                 ControlKey.SetValue("PortableOperatingSystem", 0, RegistryValueKind.DWord); 
         }
@@ -169,72 +140,9 @@ namespace windows2go.switcher {
                 ControlKey.SetValue("PortableOperatingSystem", 1, RegistryValueKind.DWord);
          
         }
+        #endregion
 
-
-        /* 
-         private void FullRegistryCheck() {
-               GetState();
-               if (!KeyExists) {
-                   inUnexpectedlState();
-               } else {
-                   switch (PortableState) {
-                       case true:
-                           inPortableState();
-                           break;
-                       case false:
-                           inNormalState();
-                           break;
-                       default:
-                           inUnexpectedlState();
-                           break;
-                   }
-               }
-           }
-
-           private void GetState() {
-
-               RegistryKey key = RegistryKey.OpenBaseKey(Microsoft.Win32.RegistryHive.LocalMachine, RegistryView.Registry32);
-               key = key.OpenSubKey(@"SYSTEM\CurrentControlSet\Control", true);
-               //check for exists "PortableOperatingSystem"
-               if (key != null) {
-                   switch (key.GetValue("PortableOperatingSystem")) {
-                       case 0:
-                           PortableState = true;
-                           KeyExists = true;
-                           break;
-                       case 1:
-                           PortableState = false;
-                           KeyExists = true;
-                           break; 
-                       default:
-                           PortableState = false;
-                           KeyExists = false;
-                           break;
-                   }
-               } 
-
-           }
-           private void inNormalState() {
-               buttonSetNormal.Enabled = false;
-               buttonSetPortable.Enabled = true;
-               labelState.Text = @"You are in normal mode";
-               labelState.ForeColor = Color.LimeGreen;
-               unExpected = false;
-           }
-           private void inPortableState() {
-               buttonSetNormal.Enabled = true;
-               buttonSetPortable.Enabled = false;
-               labelState.Text = @"You are in portable (Windows To Go) mode";
-               labelState.ForeColor = Color.Crimson;
-               unExpected = false;
-           }
-          
-
-         */
-
-        private void buttonSetNormal_Click(object sender, EventArgs e) {
-            // Registry.SetValue(keyName, "PortableOperatingSystem", 0);
-            // FullRegistryCheck();
+        private void buttonSet_Click(object sender, EventArgs e) {
             switch (CurrentStateCode) {
                 //case when it not exists yet
                 case -1:
@@ -244,7 +152,7 @@ namespace windows2go.switcher {
                     } catch (Exception ex) {
                         MessageBox.Show("Error!" + Environment.NewLine + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    
+
                     break;
                 //case when it in normal mode
                 case 0:
@@ -287,7 +195,7 @@ namespace windows2go.switcher {
                 TryToGetValue();
             } catch (Exception ex) {
                 MessageBox.Show("Error!" + Environment.NewLine + ex.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            } 
+            }
         }
     }
 }
